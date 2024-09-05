@@ -1,0 +1,25 @@
+
+Creae a bash file 
+	notepad++ .bash_profile
+create the alias for notepad++.exe	
+	alias npp="notepad++.exe -multiInst -nosession"
+make notepad++ as the default editor
+  git config --global core.editor "notepad++.exe -multiInst -nosession"
+  git config --global --list
+  git cnfig --global -e
+  
+Master - Dafeault Branch
+
+Server Default Name - Origin
+
+Workflow :
+
+Working Directory ===> Staging Area =====> Local repository(.git Folder)
+   add - to move code from WD - SA
+   commit - to move code from SA - LR
+   push - to move code from LR - Remote Repository(github)
+   
+How to clone : git clone repo_url https://github.com/reddymaestro12/git-learning.git
+new line has been added here
+
+
