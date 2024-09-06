@@ -1,0 +1,68 @@
+******************************Delta Live Tables :********************************
+https://learn.microsoft.com/en-us/azure/databricks/delta-live-tables/tutorial-pipelines
+https://learn.microsoft.com/en-us/azure/databricks/delta-live-tables/create-multiple-tables
+Complexity of the medallian architecture i.e ETL pipeline building approach :
+	- no data lineage
+	- Data validation has to be done manually
+	- data quality is poor
+	- Trouble shooting and Debugging is Challenging.
+	- Monitoring is only at pipeline level not at the granualr level
+	- Challenges in combining both batch and streaming data in one pipeline
+
+Process of Creating pipeline:
+	- cluster management
+	- infrastructe management
+	- data quality checks
+	- data governance
+	- fault tolerance
+	- Pipeline monitoring
+	- Code development
+	- Dependency management
+so here developer focus is on code develoment and the rest are not required for a developer,so here the concept of DLT came into picture a s a Declarative Frame work.
+
+what's the difference between a Delta table and a Delta Live tables ? 
+Delta table is a way to store data in tables, whereas Delta Live Tables allows you to describe how data flows between these tables declaratively. Delta Live Tables is a declarative framework that manages many delta tables, by creating them and keeping them up to date. In short, Delta tables is a data format while Delta Live Tables is a data pipeline framework
+
+
+DLT can be implemented in 3 ways : streaming,materialized view/live ,view/live
+Streaming :
+   when to use : 
+     - while ingesting data from streaming data sources like kafka,event hub etc
+	 - when no need of computing old data
+	 - to process incremental data loades ,high volume of data with low latency
+   Sql approach :
+     create streaming table emp 
+	 as select * from cloudfiles("/mnt/files/input","csv")
+	 
+   declarative appraoch :
+   return (spark.readStream.format("clooudfiles").option()....load("cloud_storage_file_path"))   
+	 
+materrialized view/Live table:
+	- when to use :
+	  - when downstream queries/processess dependency is there 
+	  - when you want to view and analyse during deve phase
+	  
+    create live table salaggregate
+    as select deptno,sum(sal) 
+    from live.emp 
+    join live.emp
+	where deptno=10 
+    group by  deptno;
+ 
+ declarativeapproach:
+ @dlt.table
+ def emp():
+     return(spark.readStream.format("json").load("path"))
+  
+view :  - when you want to store intermediate results
+     
+   create live view v_salaggregate
+    as select deptno,sum(sal) 
+    from live.emp 
+    join live.emp
+	where deptno=10 
+    group by  deptno;
+	
+	@dlt.view
+	def emp_view():
+	   return (spark.read.format("json").load("path"))
